@@ -93,9 +93,13 @@ bool streaming_refresh_stats() {
             lv_label_set_text_fmt(controller->stats_items.host_latency, "not available");
         }
         if (vdec_stream_info.has_decoder_latency) {
-            float avgSubmitTime = (float) dst->totalSubmitTime / (float) dst->submittedFrames;
-            lv_label_set_text_fmt(controller->stats_items.vdec_latency, "avg %.2f ms",
-                                  avgSubmitTime + dst->avgDecoderLatency);
+            float avgSubmitTime = dst->submittedFrames > 0 ? (float) dst->totalSubmitTime / (float) dst->submittedFrames : 0.0f;
+            float avgReassemblyTime = dst->submittedFrames > 0 ? (float) dst->totalReassemblyTime / (float) dst->submittedFrames : 0.0f;
+            lv_label_set_text_fmt(controller->stats_items.vdec_latency, "avg %.2f ms (HW: %.2f ms, NetJitter: %.2f ms, Queue: %.2f ms)",
+                                  avgSubmitTime + dst->avgDecoderLatency,
+                                  dst->avgDecoderLatency,
+                                  avgReassemblyTime,
+                                  avgSubmitTime);
         } else {
             lv_label_set_text_fmt(controller->stats_items.vdec_latency, "not available");
         }
