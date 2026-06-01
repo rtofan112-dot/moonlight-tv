@@ -32,7 +32,7 @@ jobs:
         with:
           repository: "webosbrew/ares-cli-rs"
           latest: true
-          fileName: "ares-package_*_amd64.deb"
+          fileName: "ares-package_*.deb"
           out-file-path: "temp"
 
       - name: Download Homebrew Toolbox
@@ -40,7 +40,7 @@ jobs:
         with:
           repository: "webosbrew/dev-toolbox-cli"
           latest: true
-          fileName: "webosbrew-toolbox-*_amd64.deb"
+          fileName: "webosbrew-toolbox-*.deb"
           out-file-path: "temp"
 
       - name: Update Packages
@@ -48,6 +48,9 @@ jobs:
 
       - name: Install Tools
         run: sudo apt-get install ./temp/*.deb
+
+      - name: Apply NDL Video Patch
+        run: cp scripts/ndl_video_patch.c third_party/ss4s/modules/webos/ndl/webos5/ndl_video.c
 
       - name: webOS Build
         uses: ./.github/actions/build-webos
