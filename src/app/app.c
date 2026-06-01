@@ -14,6 +14,7 @@
 #include "backend/backend_root.h"
 #include "stream/session.h"
 #include "ui/root.h"
+#include "ui/streaming/streaming.controller.h"
 #include "util/bus.h"
 #include "util/user_event.h"
 #include "util/i18n.h"
@@ -129,7 +130,18 @@ void app_deinit(app_t *app) {
 
 void app_run_loop(app_t *app) {
     app_process_events(app);
-    lv_task_handler();
+    static uint32_t last_lv_update = 0;
+    uint32_t now = SDL_GetTicks();
+    // Если оверлей закрыт и идет активный стриминг, опрашиваем UI гораздо реже для разгрузки CPU
+    if (app->session != NULL && !streaming_stats_shown()) {
+        if (now - last_lv_update >= 200) {
+            lv_task_handler();
+            last_lv_update = now;
+        }
+    } else {
+        lv_task_handler();
+        last_lv_update = now;
+    }
     SDL_Delay(1);
 }
 
