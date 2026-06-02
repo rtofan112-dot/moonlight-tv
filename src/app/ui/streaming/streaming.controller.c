@@ -95,7 +95,7 @@ bool streaming_refresh_stats() {
         if (vdec_stream_info.has_decoder_latency) {
             float avgSubmitTime = dst->submittedFrames > 0 ? (float) dst->totalSubmitTime / (float) dst->submittedFrames : 0.0f;
             float avgReassemblyTime = dst->submittedFrames > 0 ? (float) dst->totalReassemblyTime / (float) dst->submittedFrames : 0.0f;
-            lv_label_set_text_fmt(controller->stats_items.vdec_latency, "avg %.2f ms (HW: %.2f ms, NetJitter: %.2f ms, Queue: %.2f ms)",
+            lv_label_set_text_fmt(controller->stats_items.vdec_latency, "%.1f ms (HW:%.1f Net:%.1f Q:%.1f)",
                                   avgSubmitTime + dst->avgDecoderLatency,
                                   dst->avgDecoderLatency,
                                   avgReassemblyTime,
