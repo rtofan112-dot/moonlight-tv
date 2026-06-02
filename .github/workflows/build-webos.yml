@@ -50,8 +50,10 @@ jobs:
       - name: Install Tools
         run: sudo apt-get install ./temp/*.deb
 
-      - name: Apply NDL Video Patch
-        run: cp scripts/ndl_video_patch.c third_party/ss4s/modules/webos/ndl/webos5/ndl_video.c
+      - name: Apply NDL Video and Player Patches
+        run: |
+          cp scripts/ndl_video_patch.c third_party/ss4s/modules/webos/ndl/webos5/ndl_video.c
+          cp scripts/ndl_player_patch.c third_party/ss4s/modules/webos/ndl/webos5/ndl_player.c
 
       - name: webOS Build
         uses: ./.github/actions/build-webos
